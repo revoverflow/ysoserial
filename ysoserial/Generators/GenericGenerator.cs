@@ -31,7 +31,7 @@ namespace ysoserial.Generators
         public object Serialize(object cmdobj, string formatter, Boolean test)
         {
             // Disable ActivitySurrogate type protections during generation
-            ConfigurationManager.AppSettings.Set("microsoft:WorkflowComponentModel:DisableActivitySurrogateSelectorTypeCheck", "true");
+            //ConfigurationManager.AppSettings.Set("microsoft:WorkflowComponentModel:DisableActivitySurrogateSelectorTypeCheck", "true");
 
             MemoryStream stream = new MemoryStream();
           
